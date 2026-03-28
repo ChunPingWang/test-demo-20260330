@@ -181,3 +181,117 @@ curl -X DELETE http://localhost:8080/api/customers/1
 | JDBC URL | `jdbc:h2:mem:customerdb` |
 | Username | `sa` |
 | Password | （空白） |
+
+## SQL 驗證範例
+
+透過 H2 Console 執行以下 SQL，可在每次 API 操作後驗證資料庫狀態是否正確。
+
+### 建立客戶後 — 確認資料已寫入
+
+執行 API 建立客戶後：
+
+```bash
+curl -X POST http://localhost:8080/api/customers \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "0912345678",
+    "address": "Taipei, Taiwan"
+  }'
+```
+
+在 H2 Console 執行 SQL 確認：
+
+```sql
+-- 查詢所有客戶資料
+SELECT * FROM customers;
+
+-- 依 Email 查詢剛建立的客戶
+SELECT id, name, email, phone, address, created_at, updated_at
+FROM customers
+WHERE email = 'john@example.com';
+```
+
+預期結果應包含一筆 `name = 'John Doe'` 的記錄，且 `created_at` 與 `updated_at` 時間相同。
+
+### 建立多筆客戶後 — 確認資料筆數
+
+連續呼叫 POST API 建立多筆客戶後：
+
+```sql
+-- 查詢目前客戶總數
+SELECT COUNT(*) AS total_customers FROM customers;
+
+-- 依建立時間排序列出所有客戶
+SELECT id, name, email, created_at
+FROM customers
+ORDER BY created_at DESC;
+```
+
+### 更新客戶後 — 確認欄位已變更
+
+執行 API 更新客戶後：
+
+```bash
+curl -X PUT http://localhost:8080/api/customers/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Updated",
+    "email": "john.updated@example.com",
+    "phone": "0987654321",
+    "address": "Kaohsiung, Taiwan"
+  }'
+```
+
+在 H2 Console 執行 SQL 確認：
+
+```sql
+-- 確認 id=1 的客戶資料已更新
+SELECT id, name, email, phone, address, created_at, updated_at
+FROM customers
+WHERE id = 1;
+```
+
+預期結果：`name` 應為 `'John Updated'`、`email` 應為 `'john.updated@example.com'`，且 `updated_at` 時間晚於 `created_at`。
+
+### 刪除客戶後 — 確認資料已移除
+
+執行 API 刪除客戶後：
+
+```bash
+curl -X DELETE http://localhost:8080/api/customers/1
+```
+
+在 H2 Console 執行 SQL 確認：
+
+```sql
+-- 確認 id=1 的客戶已不存在
+SELECT * FROM customers WHERE id = 1;
+
+-- 查詢剩餘客戶數量
+SELECT COUNT(*) AS remaining_customers FROM customers;
+```
+
+預期結果：第一個查詢應回傳空結果（0 筆），第二個查詢的數量應比刪除前少 1。
+
+### 其他實用查詢
+
+```sql
+-- 查詢 Email 是否重複（驗證唯一性約束）
+SELECT email, COUNT(*) AS cnt
+FROM customers
+GROUP BY email
+HAVING COUNT(*) > 1;
+
+-- 查詢特定時間區間內建立的客戶
+SELECT * FROM customers
+WHERE created_at BETWEEN '2026-03-28 00:00:00' AND '2026-03-28 23:59:59';
+
+-- 模糊搜尋客戶姓名
+SELECT * FROM customers
+WHERE name LIKE '%John%';
+
+-- 查看資料表結構
+SHOW COLUMNS FROM customers;
+```
