@@ -1,0 +1,34 @@
+{
+  "version": "1",
+  "name": "Customer API Tests",
+  "uid": "customer-api-tests-collection",
+  "rootDir": "",
+  "environments": [
+    {
+      "uid": "local-dev",
+      "name": "Local Development",
+      "variables": {
+        "BASE_URL": "http://localhost:8080"
+      }
+    },
+    {
+      "uid": "testing",
+      "name": "Testing",
+      "variables": {
+        "BASE_URL": "https://test-api.example.com"
+      }
+    },
+    {
+      "uid": "production",
+      "name": "Production",
+      "variables": {
+        "BASE_URL": "https://api.example.com"
+      }
+    }
+  ],
+  "scripts": {
+    "pre-request": "",
+    "post-response": ""
+  },
+  "tests": ""
+}

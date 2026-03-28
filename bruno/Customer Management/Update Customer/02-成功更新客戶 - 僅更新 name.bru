@@ -1,0 +1,35 @@
+meta {
+  name: 成功更新客戶 - 僅更新 name
+  type: http
+  seq: 2
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+PUT {{base_url}}/api/customers/1
+Content-Type: application/json
+
+{
+  "name": "John Smith",
+  "email": "john@example.com"
+}
+
+tests {
+  test("HTTP 狀態碼應為 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("回應的 name 應為 John Smith", function() {
+    expect(res.body.name).to.equal("John Smith");
+  });
+  
+  test("回應的 email 應為 john@example.com (未改變)", function() {
+    expect(res.body.email).to.equal("john@example.com");
+  });
+  
+  test("回應的 phone 應為 0912345678 (未改變)", function() {
+    expect(res.body.phone).to.equal("0912345678");
+  });
+}

@@ -1,0 +1,50 @@
+meta {
+  name: 成功更新客戶 - 更新所有欄位
+  type: http
+  seq: 1
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+PUT {{base_url}}/api/customers/1
+Content-Type: application/json
+
+{
+  "name": "John Doe Updated",
+  "email": "john.updated@example.com",
+  "phone": "0912345679",
+  "address": "Taipei, Taiwan - Updated"
+}
+
+tests {
+  test("HTTP 狀態碼應為 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("回應的 ID 應為 1", function() {
+    expect(res.body.id).to.equal(1);
+  });
+  
+  test("回應的 name 應為 John Doe Updated", function() {
+    expect(res.body.name).to.equal("John Doe Updated");
+  });
+  
+  test("回應的 email 應為 john.updated@example.com", function() {
+    expect(res.body.email).to.equal("john.updated@example.com");
+  });
+  
+  test("回應的 phone 應為 0912345679", function() {
+    expect(res.body.phone).to.equal("0912345679");
+  });
+  
+  test("回應的 address 應為 Taipei, Taiwan - Updated", function() {
+    expect(res.body.address).to.equal("Taipei, Taiwan - Updated");
+  });
+  
+  test("回應應包含 createdAt 和 updatedAt", function() {
+    expect(res.body.createdAt).to.exist;
+    expect(res.body.updatedAt).to.exist;
+  });
+}

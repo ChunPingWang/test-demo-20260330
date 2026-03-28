@@ -1,0 +1,23 @@
+meta {
+  name: 取得客戶 - 無效的 ID 格式
+  type: http
+  seq: 4
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+GET {{base_url}}/api/customers/invalid-id
+Content-Type: application/json
+
+tests {
+  test("HTTP 狀態碼應為 400", function() {
+    expect(res.status).to.equal(400);
+  });
+  
+  test("錯誤訊息應包含 invalid", function() {
+    const message = res.body.message || res.body.error || '';
+    expect(message.toLowerCase()).to.include("invalid");
+  });
+}

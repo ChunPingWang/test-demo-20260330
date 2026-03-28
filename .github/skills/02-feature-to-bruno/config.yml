@@ -1,0 +1,322 @@
+# Feature to Bruno 轉換配置
+
+此配置文件定義如何將 Gherkin Feature 檔案轉換為 Bruno 測試腳本。
+
+## 檔案配置
+
+```yaml
+# .github/skills/02-feature-to-bruno/config.yml
+
+# ========== 基本設定 ==========
+version: "1.0"
+description: "Feature to Bruno 轉換配置"
+
+# ========== 命名與組織 ==========
+naming:
+  # 輸出檔案命名規則
+  convention: "{scenario_title}"  # 使用 scenario 標題作為檔案名
+  # 其他選項:
+  # - "{feature_title}_{scenario_title}"
+  # - "{index}_{scenario_title}"
+  # - "{method}_{endpoint}"
+  
+  # 特殊字符替換規則
+  special_chars:
+    "/": "-"
+    "\\": "-"
+    ":": "-"
+    "*": ""
+    "?": ""
+    "\"": ""
+    "|": "-"
+    "<": ""
+    ">": ""
+
+# ========== 目錄結構 ==========
+directory:
+  # Feature 檔案位置
+  input_path: "./features"
+  
+  # Bruno 輸出位置
+  output_path: "./bruno"
+  
+  # 生成結構規則
+  structure:
+    # 按 feature 名稱建立子資料夾
+    create_feature_folders: true
+    
+    # 按場景標題進一步細分
+    create_scenario_folders: false
+    
+    # 範例:
+    # create_feature_folders: true 時
+    #   ./bruno/Customer Management/
+    #              ├── Create Customer/
+    #              │   ├── 成功建立客戶 - 所有欄位.bru
+    #              │   ├── 成功建立客戶 - 僅必填欄位.bru
+    #              └── Delete Customer/
+    #
+    # create_scenario_folders: true 時
+    #   ./bruno/Customer Management/
+    #              └── Create Customer/
+    #                  └── 成功建立客戶 - 所有欄位/
+    #                      └── 成功建立客戶 - 所有欄位.bru
+
+# ========== 步驟對應規則 ==========
+step_mapping:
+  # Given 步驟 - Setup
+  given:
+    api_base_url:
+      patterns:
+        - "API 基底 URL 為.*\"([^\"]+)\""
+        - "API 基底 URL 為環境變數\\s+\"([^\"]+)\""
+      output: "vars"
+      property: "base_url"
+    
+    content_type:
+      patterns:
+        - "Content-Type 設定為\\s+\"([^\"]+)\""
+      output: "header"
+      property: "Content-Type"
+    
+    authorization:
+      patterns:
+        - "Authorization 設定為 Bearer token\\s+\"([^\"]+)\""
+        - "Authorization 設定為\\s+(.+)"
+      output: "header"
+      property: "Authorization"
+    
+    request_body:
+      patterns:
+        - "準備(.+)的請求"
+        - "準備以下.*請求體"
+      output: "body"
+      format: "json"
+  
+  # When 步驟 - Action
+  when:
+    http_request:
+      patterns:
+        - "發送\\s+(GET|POST|PUT|PATCH|DELETE)\\s+請求到\\s+\"([^\"]+)\""
+        - "帶著.*發送\\s+(GET|POST|PUT|PATCH|DELETE)\\s+請求到\\s+\"([^\"]+)\""
+      output: "method_and_path"
+  
+  # Then 步驟 - Assertions
+  then:
+    status_code:
+      patterns:
+        - "HTTP 狀態碼應為\\s+(\\d+)"
+      output: "test"
+      template: "expect(res.status).to.equal({value});"
+      test_name: "HTTP 狀態碼應為 {value}"
+    
+    response_field_exists:
+      patterns:
+        - "回應應包含有效的\\s+(.+)"
+        - "回應應包含\\s+\"([^\"]+)\".*時間戳記"
+        - "回應中應存在\\s+\"([^\"]+)\"\\s+欄位"
+      output: "test"
+      template: "expect(res.body.{field}).to.exist;"
+    
+    response_field_value:
+      patterns:
+        - "回應的\\s+(.+?)\\s+應為\\s+\"([^\"]+)\""
+        - "回應的\\s+(.+?)\\s+應為\\s+(\\d+)"
+      output: "test"
+      template: "expect(res.body.{field}).to.equal({value});"
+    
+    response_contains:
+      patterns:
+        - "回應應包含\\s+\"([^\"]+)\""
+        - "錯誤訊息應包含\\s+\"([^\"]+)\""
+        - "訊息應包含\\s+\"([^\"]+)\""
+      output: "test"
+      template: "expect(JSON.stringify(res.body)).to.include({value});"
+    
+    response_field_not_exists:
+      patterns:
+        - "回應不應包含\\s+\"([^\"]+)\"\\s+欄位"
+      output: "test"
+      template: "expect(res.body.{field}).to.not.exist;"
+
+# ========== 數據表處理 ==========
+data_table:
+  # 將 Data Table 轉換為 JSON
+  format: "json"
+  
+  # 欄位名稱轉換規則
+  field_naming:
+    style: "camelCase"  # camelCase, snake_case, PascalCase, kebab-case
+    keep_original: false
+  
+  # 值型態推斷
+  type_inference: true
+  
+  # 嵌套支持 (使用點符號或陣列索引)
+  nested_support: true
+  # 例: "customer.name" → {"customer": {"name": "value"}}
+  #     "items[0].id" → {"items": [{"id": "value"}]}
+
+# ========== Scenario Outline 處理 ==========
+scenario_outline:
+  # 為每個 Example 生成單獨的 .bru 檔案
+  separate_files_per_example: true
+  
+  # 檔案命名
+  naming_pattern: "{scenario}_{example_values}"
+  # 其他選項:
+  # - "{scenario}_{index}"
+  # - "{scenario}_{example_values}"
+  # - "{scenario} - {example_values}"
+
+# ========== 環境配置生成 ==========
+environment:
+  # 生成環境配置檔 (bruno.json)
+  generate_config: true
+  
+  # 預設環境
+  default_environments:
+    - name: "Local Development"
+      base_url: "http://localhost:8080"
+      description: "本機開發環境"
+    
+    - name: "Testing"
+      base_url: "https://test-api.example.com"
+      description: "測試伺服器"
+    
+    - name: "Production"
+      base_url: "https://api.example.com"
+      description: "生產環境"
+
+# ========== 測試序號 ==========
+sequencing:
+  # 開始序號
+  start_seq: 1
+  
+  # 序號遞增
+  increment: 1
+  
+  # 按資料夾遞增還是全局遞增
+  scope: "per_folder"  # per_folder | global
+
+# ========== 生成額外文件 ==========
+generate:
+  # 生成 README.md
+  readme: true
+  
+  # 生成 bruno.json 環境配置
+  bruno_config: true
+  
+  # 生成 API 索引 (mapping files)
+  api_index: true
+  
+  # 生成轉換報告
+  conversion_report: true
+
+# ========== 註解與說明 ==========
+documentation:
+  # 在生成的 .bru 檔案中添加註解
+  add_comments: true
+  
+  # 包含原始 Feature 的 Scenario 描述
+  include_scenario_description: true
+  
+  # 包含對應的 Feature 檔案路徑
+  include_source_reference: true
+
+# ========== 保留 Feature 段落 ==========
+preserve:
+  # 保留 Scenario 中的 Docstring (""" ... """)
+  docstrings: true
+  
+  # 保留標籤 (@tag)
+  tags: true
+
+# ========== 驗證規則 ==========
+validation:
+  # 驗證 Feature 檔案語法
+  validate_feature_syntax: true
+  
+  # 驗證 HTTP 方法有效性
+  validate_http_methods: true
+  
+  # 檢查必須的步驟 (如 Given, When, Then)
+  validate_step_structure: true
+  
+  # 警告未支持的步驟
+  warn_unsupported_steps: true
+
+# ========== 輸出控制 ==========
+output:
+  # 覆蓋現有檔案
+  overwrite: true
+  
+  # 備份現有檔案
+  backup: false
+  
+  # 詳細日誌
+  verbose: true
+  
+  # 日誌檔案
+  log_file: "./bruno-conversion.log"
+
+# ========== 排除規則 ==========
+exclude:
+  # 排除特定檔案
+  files: []
+  # 例: ["sample.feature", "template.*"]
+  
+  # 排除包含特定標籤的 Scenario
+  tags: []
+  # 例: ["@skip", "@todo", "@wip"]
+  
+  # 排除特定資料夾
+  directories: []
+  # 例: ["./features/deprecated", "./features/archive"]
+```
+
+## 使用說明
+
+### 預設配置
+
+如果沒有 `config.yml` 檔，使用以下預設值：
+
+```yaml
+naming:
+  convention: "{scenario_title}"
+directory:
+  input_path: "./features"
+  output_path: "./bruno"
+  structure:
+    create_feature_folders: true
+    create_scenario_folders: false
+sequencing:
+  start_seq: 1
+  scope: "per_folder"
+generate:
+  readme: true
+  bruno_config: true
+documentation:
+  add_comments: true
+validation:
+  validate_feature_syntax: true
+output:
+  overwrite: true
+```
+
+### 自訂配置
+
+1. 在 `.github/skills/02-feature-to-bruno/` 建立 `config.yml`
+2. 修改所需參數
+3. 重新執行轉換
+
+### 配置驗證
+
+轉換工具會在啟動時驗證配置：
+- ✅ 所有必須欄位存在
+- ✅ 路徑有效
+- ✅ 正則表達式語法正確
+- ✅ 範本變數可用
+
+如有錯誤，工具會提示並使用預設值。
+

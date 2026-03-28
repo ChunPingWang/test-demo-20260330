@@ -1,0 +1,62 @@
+meta {
+  name: 成功建立客戶 - 所有欄位
+  type: http
+  seq: 1
+}
+
+# Feature: 建立新客戶 (Create Customer)
+# Scenario: 成功建立客戶 - 所有欄位
+# Source: features/customer-create.feature
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+POST {{base_url}}/api/customers
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "0912345678",
+  "address": "Taipei, Taiwan"
+}
+
+tests {
+  test("HTTP 狀態碼應為 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  
+  test("回應應包含有效的 Customer ID", function() {
+    expect(res.body.id).to.be.a('string');
+    expect(res.body.id).to.not.be.empty;
+  });
+  
+  test("回應的 name 應為 John Doe", function() {
+    expect(res.body.name).to.equal("John Doe");
+  });
+  
+  test("回應的 email 應為 john@example.com", function() {
+    expect(res.body.email).to.equal("john@example.com");
+  });
+  
+  test("回應的 phone 應為 0912345678", function() {
+    expect(res.body.phone).to.equal("0912345678");
+  });
+  
+  test("回應的 address 應為 Taipei, Taiwan", function() {
+    expect(res.body.address).to.equal("Taipei, Taiwan");
+  });
+  
+  test("回應應包含 createdAt 時間戳記", function() {
+    expect(res.body.createdAt).to.exist;
+  });
+  
+  test("回應應包含 updatedAt 時間戳記", function() {
+    expect(res.body.updatedAt).to.exist;
+  });
+}
+
+tests:post-response {
+  set('customerId', res.body.id);
+}

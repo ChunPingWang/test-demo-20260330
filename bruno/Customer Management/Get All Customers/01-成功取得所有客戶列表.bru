@@ -1,0 +1,36 @@
+meta {
+  name: 成功取得所有客戶列表
+  type: http
+  seq: 1
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+GET {{base_url}}/api/customers
+Content-Type: application/json
+
+tests {
+  test("HTTP 狀態碼應為 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("回應應為陣列", function() {
+    expect(res.body).to.be.an('array');
+  });
+  
+  test("回應應包含 2 個客戶記錄", function() {
+    expect(res.body.length).to.equal(2);
+  });
+  
+  test("回應應包含客戶 John Doe", function() {
+    const hasJohn = res.body.some(c => c.name === 'John Doe');
+    expect(hasJohn).to.be.true;
+  });
+  
+  test("回應應包含客戶 Jane Smith", function() {
+    const hasJane = res.body.some(c => c.name === 'Jane Smith');
+    expect(hasJane).to.be.true;
+  });
+}

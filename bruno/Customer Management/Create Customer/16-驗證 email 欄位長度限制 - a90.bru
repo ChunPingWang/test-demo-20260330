@@ -1,0 +1,23 @@
+meta {
+  name: 驗證 email 欄位長度限制 - a90
+  type: http
+  seq: 16
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+POST {{base_url}}/api/customers
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com"
+}
+
+tests {
+  test("HTTP 狀態碼應為 201", function() {
+    expect(res.status).to.equal(201);
+  });
+}

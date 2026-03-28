@@ -1,0 +1,28 @@
+meta {
+  name: 建立客戶失敗 - Email 缺少域名
+  type: http
+  seq: 9
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+POST {{base_url}}/api/customers
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@"
+}
+
+tests {
+  test("HTTP 狀態碼應為 400", function() {
+    expect(res.status).to.equal(400);
+  });
+  
+  test("錯誤訊息應包含 Email format is invalid", function() {
+    const message = res.body.message || res.body.error || '';
+    expect(message).to.include("Email format is invalid");
+  });
+}

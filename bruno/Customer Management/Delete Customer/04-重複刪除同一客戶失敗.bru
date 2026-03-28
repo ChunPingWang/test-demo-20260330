@@ -1,0 +1,23 @@
+meta {
+  name: 重複刪除同一客戶失敗
+  type: http
+  seq: 4
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+DELETE {{base_url}}/api/customers/1
+Content-Type: application/json
+
+tests {
+  test("HTTP 狀態碼應為 404", function() {
+    expect(res.status).to.equal(404);
+  });
+  
+  test("錯誤訊息應包含 Customer not found", function() {
+    const message = res.body.message || res.body.error || '';
+    expect(message).to.include("Customer not found");
+  });
+}

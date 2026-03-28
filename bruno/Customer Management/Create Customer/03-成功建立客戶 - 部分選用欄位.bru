@@ -1,0 +1,29 @@
+meta {
+  name: 成功建立客戶 - 部分選用欄位
+  type: http
+  seq: 3
+}
+
+vars {
+  base_url: {{BASE_URL}}
+}
+
+POST {{base_url}}/api/customers
+Content-Type: application/json
+
+{
+  "name": "Bob Wilson",
+  "email": "bob@example.com",
+  "phone": "0987654321"
+}
+
+tests {
+  test("HTTP 狀態碼應為 201", function() {
+    expect(res.status).to.equal(201);
+  });
+  
+  test("回應應包含有效的 Customer ID", function() {
+    expect(res.body.id).to.be.a('string');
+    expect(res.body.id).to.not.be.empty;
+  });
+}
