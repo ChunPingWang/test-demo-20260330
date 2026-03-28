@@ -1,0 +1,423 @@
+# Bruno 批量測試執行與報告生成 - 配置文檔
+
+## 配置概述
+
+本配置文檔定義了批量測試執行的各項參數和預設值。
+
+## 配置結構
+
+```yaml
+# ═══════════════════════════════════════════════════════════════
+# 03-run-bruno-tests-batch Skill 配置
+# ═══════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────
+# 1. Bruno CLI 配置
+# ───────────────────────────────────────────────────────────────
+bruno:
+  # Bruno CLI 可執行文件路徑
+  # 說明：支援相對路徑和絕對路徑，支援 Windows/Mac/Linux
+  # 預設行為：自動在 PATH 中尋找 bruno 命令
+  cli-path: "bruno"
+  
+  # 單個測試的全局超時時間 (秒)
+  # 說明：若測試執行時間超過此值，自動終止並標記為「超時失敗」
+  # 可被映射檔中的「超時(秒)」欄位覆蓋
+  # 範圍：1-300，推薦：20-60
+  timeout: 30
+  
+  # 並行執行的測試數量
+  # 說明：1 = 順序執行；2-8 = 並行執行
+  # 注意：並行執行可能導致資料庫衝突，測試間有依賴時應設為 1
+  # 預設：1 (順序執行)
+  parallel-count: 1
+  
+  # Bruno 環境檔案路徑 (.env)
+  # 說明：相對路徑相對於 bruno-path 目錄
+  # 支援多環境：.env, .env.testing, .env.production
+  env-file: ".env"
+  
+  # 繼續執行失敗的測試
+  # 說明：true = 某個測試失敗後繼續執行後續測試
+  #      false = 某個測試失敗後終止整個批次
+  # 預設：true (推薦)
+  continue-on-failure: true
+  
+  # 輸出冗長日誌
+  # 說明：true = 顯示詳細的測試執行過程
+  #      false = 只顯示關鍵信息
+  # 預設：false
+  verbose: false
+
+# ───────────────────────────────────────────────────────────────
+# 2. 測試執行配置
+# ───────────────────────────────────────────────────────────────
+execution:
+  # 測試執行模式
+  # 說明：
+  #   sequential = 順序執行（測試間有依賴時選此）
+  #   parallel = 並行執行（測試獨立時選此）
+  #   smart = 自動判斷（根據映射檔中的依賴欄位判斷）
+  # 預設：sequential
+  mode: "sequential"
+  
+  # 失敗重試次數
+  # 說明：0 = 不重試；1-3 = 失敗後重試
+  # 推薦：1 (重試 1 次，用於偵測網路問題)
+  # 預設：0
+  retry-count: 0
+  
+  # 重試間隔 (毫秒)
+  # 說明：重試前等待的時間
+  # 預設：1000 (1 秒)
+  retry-delay: 1000
+  
+  # 測試間延遲 (毫秒)
+  # 說明：執行完一個測試後，暫停的時間
+  # 用於避免 API 速率限制或伺服器過載
+  # 預設：0 (無延遲)
+  test-delay: 0
+  
+  # 是否驗證預期狀態碼
+  # 說明：true = 檢查回應狀態碼是否符合預期
+  #      false = 不檢查狀態碼
+  # 預設：true
+  verify-status-code: true
+  
+  # 是否執行測試中的斷言 (expect statements)
+  # 說明：true = 執行 .bru 中的 tests 區塊
+  #      false = 跳過斷言，只檢查狀態碼
+  # 預設：true
+  verify-assertions: true
+
+# ───────────────────────────────────────────────────────────────
+# 3. 報告配置
+# ───────────────────────────────────────────────────────────────
+reporting:
+  # 報告輸出目錄
+  # 說明：相對路徑相對於專案根目錄
+  # 若目錄不存在，自動創建
+  # 預設：./test-reports
+  output-dir: "./test-reports"
+  
+  # 報告格式
+  # 說明：支援多個格式，以逗號分隔
+  #   - markdown：Markdown 格式 (推薦閱讀)
+  #   - json：JSON 格式 (用於程式化分析)
+  #   - html：HTML 格式 (用於瀏覽器查看)
+  # 預設：markdown,json
+  formats: ["markdown", "json"]
+  
+  # 生成趨勢報告
+  # 說明：true = 根據歷史記錄生成趨勢分析
+  #      false = 不生成趨勢報告
+  # 前提：需要保存多次執行的歷史記錄
+  # 預設：true
+  include-trends: true
+  
+  # 趨勢分析時間窗口 (天)
+  # 說明：分析過去多少天的執行記錄
+  # 範圍：1-90
+  # 預設：30 (過去 30 天)
+  history-days: 30
+  
+  # 生成性能分析報告
+  # 說明：true = 包含最快/最慢測試、平均響應時間等
+  # 預設：true
+  include-performance: true
+  
+  # 生成失敗分析報告
+  # 說明：true = 統計失敗原因、提供改進建議
+  # 預設：true
+  include-failure-analysis: true
+  
+  # 包含詳細的請求/回應日誌
+  # 說明：true = 報告中顯示每個測試的完整 HTTP 流量
+  #      false = 只顯示摘要信息
+  # 注意：開啟此選項會增加報告檔案大小
+  # 預設：false
+  include-request-logs: false
+  
+  # 敏感信息遮蔽
+  # 說明：true = 隱藏密碼、Token 等敏感信息
+  #      false = 完整顯示日誌
+  # 推薦：true (安全考量)
+  # 預設：true
+  mask-sensitive-data: true
+  
+  # 報告檔名前綴
+  # 說明：報告檔名為 {prefix}-{timestamp}.{format}
+  # 預設：test-report
+  report-prefix: "test-report"
+
+# ───────────────────────────────────────────────────────────────
+# 4. 環境配置
+# ───────────────────────────────────────────────────────────────
+environments:
+  # 本地開發環境
+  Local:
+    # 環境描述
+    description: "Local Development"
+    
+    # API 基底 URL
+    base-url: "http://localhost:8080"
+    
+    # 環境變數檔案
+    env-file: ".env"
+    
+    # 超時設定 (秒) - 本地通常更寬鬆
+    timeout: 30
+    
+    # 並行數 - 本地可以更多
+    parallel-count: 4
+  
+  # 測試環境
+  Testing:
+    description: "Testing Environment"
+    base-url: "https://api-testing.company.com"
+    env-file: ".env.testing"
+    
+    # 測試環境可能不太穩定，增加超時
+    timeout: 45
+    parallel-count: 2
+  
+  # 生產環境
+  Production:
+    description: "Production Environment"
+    base-url: "https://api.company.com"
+    env-file: ".env.production"
+    
+    # 生產環境更保守，增加超時，降低並行度
+    timeout: 60
+    parallel-count: 1
+
+# ───────────────────────────────────────────────────────────────
+# 5. 映射檔配置
+# ───────────────────────────────────────────────────────────────
+mapping:
+  # 映射檔編碼
+  # 說明：CSV 檔案的字符編碼
+  # 支援：utf-8, utf-16, gb2312, gbk 等
+  # 預設：utf-8 (自動偵測)
+  encoding: "utf-8"
+  
+  # 映射檔 CSV 分隔符
+  # 說明：通常為逗號，但也可以是分號/製表符
+  # 預設：, (自動偵測)
+  delimiter: ","
+  
+  # 跳過空行
+  # 說明：true = 忽略空行
+  #      false = 將空行當作數據行
+  # 預設：true
+  skip-empty-rows: true
+  
+  # 欄位遺漏處理
+  # 說明：strict = 欄位遺漏時報錯
+  #      permissive = 欄位遺漏時使用預設值
+  # 預設：permissive
+  missing-fields: "permissive"
+
+# ───────────────────────────────────────────────────────────────
+# 6. 測試篩選配置
+# ───────────────────────────────────────────────────────────────
+filtering:
+  # API 端點篩選 (正規表達式)
+  # 說明：只執行符合此正規表達式的 API 端點
+  # 範例：^POST.*customers$ = 只執行 POST /api/customers
+  # 預設：null (執行所有 API)
+  api-pattern: null
+  
+  # 優先級篩選
+  # 說明：只執行此優先級或更高的測試
+  # 值：High > Medium > Low
+  # 預設：Low (執行所有優先級)
+  min-priority: "Low"
+  
+  # 環境篩選
+  # 說明：只執行指定環境的測試
+  # 值：Local, Testing, Production 或組合
+  # 範例：[Local, Testing] = 只執行 Local 和 Testing
+  # 預設：[] (執行所有環境)
+  environments: []
+  
+  # 標籤篩選
+  # 說明：只執行包含指定標籤的測試 (若映射檔有標籤欄位)
+  # 範例：[crud, security] = 只執行標籤包含 crud 或 security 的測試
+  # 預設：[] (執行所有標籤)
+  tags: []
+
+# ───────────────────────────────────────────────────────────────
+# 7. 通知配置 (可選)
+# ───────────────────────────────────────────────────────────────
+notifications:
+  # 啟用通知
+  # 說明：true = 在測試完成時發送通知
+  # 預設：false
+  enabled: false
+  
+  # 通知事件
+  # 說明：在什麼情況下發送通知
+  events:
+    # 測試完成時
+    on-complete: true
+    
+    # 有測試失敗時
+    on-failure: true
+    
+    # 全部測試通過時
+    on-success: true
+  
+  # 通知服務
+  # 說明：支援 slack, email, teams, webhook
+  # 可同時配置多個，以逗號分隔
+  services: ["slack"]
+  
+  # Slack 配置
+  slack:
+    # Webhook URL
+    # 說明：Slack Incoming Webhook 地址
+    webhook-url: ""
+    
+    # Slack Channel
+    # 說明：發送到哪個頻道
+    channel: "#qa-testing"
+    
+    # 通知詳細程度
+    # 說明：simple = 只顯示通過/失敗統計
+    #      detailed = 包含失敗測試列表
+    verbosity: "simple"
+
+# ───────────────────────────────────────────────────────────────
+# 8. 高級配置
+# ───────────────────────────────────────────────────────────────
+advanced:
+  # 保留執行歷史
+  # 說明：true = 保存每次執行的詳細記錄，用於生成趨勢報告
+  # 預設：true
+  preserve-history: true
+  
+  # 歷史檔案保留天數
+  # 說明：超過此天數的歷史自動刪除
+  # 範圍：7-365
+  # 預設：90
+  history-retention-days: 90
+  
+  # 暫存目錄
+  # 說明：临時檔案存放目錄
+  # 預設：./.test-temp
+  temp-dir: "./.test-temp"
+  
+  # 自動清理暫存檔案
+  # 說明：true = 執行完成後自動刪除暫存檔案
+  # 預設：true
+  auto-cleanup: true
+  
+  # 支援自定義 Bruno 環境
+  # 說明：除了 bruno: env-file 指定的 .env，
+  #      還可以指定額外的環境變數
+  # 範例：
+  #   custom-vars:
+  #     CUSTOM_VAR1: "value1"
+  #     CUSTOM_VAR2: "value2"
+  custom-vars: {}
+
+# ───────────────────────────────────────────────────────────────
+# 9. 驗證規則配置 (高級)
+# ───────────────────────────────────────────────────────────────
+validation:
+  # 狀態碼驗證
+  status-code:
+    # 是否啟用狀態碼驗證
+    enabled: true
+    
+    # 預期狀態碼列表 (若映射檔未指定)
+    defaults:
+      GET: [200, 304]
+      POST: [200, 201, 202]
+      PUT: [200, 204]
+      DELETE: [200, 204, 404]
+      PATCH: [200, 204]
+  
+  # 回應內容驗證
+  response-content:
+    # 檢查 Content-Type 標頭
+    check-content-type: true
+    
+    # 預期的 Content-Type
+    expected-content-types:
+      - "application/json"
+      - "application/json; charset=utf-8"
+    
+    # 檢查回應是否為空
+    allow-empty-response: false
+  
+  # 性能驗證
+  performance:
+    # 檢查響應時間是否超過閾值
+    check-response-time: true
+    
+    # 預警時間 (毫秒) - 超過此值在報告中標記為「慢速」
+    warning-threshold: 1000
+    
+    # 危險時間 (毫秒) - 超過此值標記為「警告」
+    danger-threshold: 2000
+
+---
+
+## 配置使用示例
+
+### 示例 1：本地快速測試（順序執行，30 秒超時）
+
+```yaml
+bruno:
+  timeout: 30
+  parallel-count: 1
+execution:
+  mode: "sequential"
+  continue-on-failure: true
+reporting:
+  output-dir: "./test-reports"
+  formats: ["markdown"]
+```
+
+### 示例 2：CI/CD 環境自動化（並行執行，45 秒超時，包含趨勢）
+
+```yaml
+bruno:
+  timeout: 45
+  parallel-count: 4
+execution:
+  mode: "parallel"
+  continue-on-failure: false
+reporting:
+  output-dir: "./test-reports"
+  formats: ["markdown", "json"]
+  include-trends: true
+  history-days: 30
+notifications:
+  enabled: true
+  services: ["slack"]
+```
+
+### 示例 3：生產環境驗證（順序執行，60 秒超時，詳細日誌）
+
+```yaml
+bruno:
+  timeout: 60
+  parallel-count: 1
+  verbose: true
+execution:
+  mode: "sequential"
+  continue-on-failure: false
+reporting:
+  output-dir: "./test-reports"
+  include-failure-analysis: true
+  include-request-logs: true
+  mask-sensitive-data: true
+```
+
+---
+
+**版本**：1.0  
+**最後更新**：2026-03-30

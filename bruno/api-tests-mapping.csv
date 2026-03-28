@@ -1,0 +1,35 @@
+API 端點,HTTP 方法,環境,測試目錄,測試檔案,優先級,跳過,超時(秒),預期狀態碼
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,01-成功建立客戶 - 所有欄位.bru,High,false,30,201
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,02-成功建立客戶 - 僅必填欄位.bru,High,false,30,201
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,03-成功建立客戶 - 部分選用欄位.bru,High,false,30,201
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,04-建立客戶失敗 - 缺少 name 欄位.bru,Medium,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,05-建立客戶失敗 - 缺少 email 欄位.bru,Medium,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,06-建立客戶失敗 - name 為空字符串.bru,Medium,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,07-建立客戶失敗 - 無效的 Email 格式.bru,Medium,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,08-建立客戶失敗 - Email 缺少@符號.bru,Medium,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,09-建立客戶失敗 - Email 缺少域名.bru,Medium,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,10-建立客戶失敗 - Email 已存在.bru,Medium,false,30,409
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,11-驗證 name 欄位長度限制 - A.bru,Low,false,30,201
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,12-驗證 name 欄位長度限制 - A50.bru,Low,false,30,201
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,13-驗證 name 欄位長度限制 - A51.bru,Low,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,14-驗證 name 欄位長度限制 - empty.bru,Low,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,15-驗證 email 欄位長度限制 - a@b.c.bru,Low,false,30,201
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,16-驗證 email 欄位長度限制 - a90.bru,Low,false,30,201
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,17-驗證 email 欄位長度限制 - a95.bru,Low,false,30,400
+POST /api/customers,POST,Local,bruno/Customer Management/Create Customer,18-建立客戶 - 特殊字符在 name.bru,Low,false,30,201
+GET /api/customers,GET,Local,bruno/Customer Management/Get All Customers,01-成功取得所有客戶列表.bru,High,false,20,200
+GET /api/customers,GET,Local,bruno/Customer Management/Get All Customers,02-成功取得空的客戶列表.bru,High,false,20,200
+GET /api/customers/{id},GET,Local,bruno/Customer Management/Get Customer,01-成功取得存在的客戶資訊.bru,High,false,20,200
+GET /api/customers/{id},GET,Local,bruno/Customer Management/Get Customer,02-驗證回應包含時間戳記.bru,Medium,false,20,200
+GET /api/customers/{id},GET,Local,bruno/Customer Management/Get Customer,03-取得不存在的客戶失敗.bru,Medium,false,20,404
+GET /api/customers/{id},GET,Local,bruno/Customer Management/Get Customer,04-取得客戶 - 無效的 ID 格式.bru,Low,false,20,400
+GET /api/customers/{id},GET,Local,bruno/Customer Management/Get Customer,05-取得客戶 - 負數 ID.bru,Low,false,20,400
+PUT /api/customers/{id},PUT,Local,bruno/Customer Management/Update Customer,01-成功更新客戶 - 更新所有欄位.bru,High,false,30,200
+PUT /api/customers/{id},PUT,Local,bruno/Customer Management/Update Customer,02-成功更新客戶 - 僅更新 name.bru,High,false,30,200
+PUT /api/customers/{id},PUT,Local,bruno/Customer Management/Update Customer,03-更新失敗 - 客戶不存在.bru,Medium,false,30,404
+PUT /api/customers/{id},PUT,Local,bruno/Customer Management/Update Customer,04-更新失敗 - 缺少 name 欄位.bru,Medium,false,30,400
+PUT /api/customers/{id},PUT,Local,bruno/Customer Management/Update Customer,05-更新失敗 - 無效的 Email 格式.bru,Medium,false,30,400
+DELETE /api/customers/{id},DELETE,Local,bruno/Customer Management/Delete Customer,01-成功刪除存在的客戶.bru,High,false,25,204
+DELETE /api/customers/{id},DELETE,Local,bruno/Customer Management/Delete Customer,02-刪除失敗 - 客戶不存在.bru,Medium,false,25,404
+DELETE /api/customers/{id},DELETE,Local,bruno/Customer Management/Delete Customer,03-刪除失敗 - 無效的客戶 ID 格式.bru,Medium,false,25,400
+DELETE /api/customers/{id},DELETE,Local,bruno/Customer Management/Delete Customer,04-重複刪除同一客戶失敗.bru,Low,false,25,404

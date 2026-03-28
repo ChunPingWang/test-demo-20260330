@@ -1,0 +1,865 @@
+{
+  "executionSummary": {
+    "startTime": "2026-03-30T15:30:00Z",
+    "endTime": "2026-03-30T15:40:45Z",
+    "totalDuration": 645000,
+    "durationSeconds": 645,
+    "environment": "Local",
+    "baseUrl": "http://localhost:8080",
+    "totalTests": 34,
+    "passed": 32,
+    "failed": 2,
+    "skipped": 0,
+    "successRate": 94.1,
+    "avgResponseTime": 245,
+    "minResponseTime": 85,
+    "maxResponseTime": 580
+  },
+  "endpointsStatistics": [
+    {
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "totalTests": 18,
+      "passed": 17,
+      "failed": 1,
+      "skipped": 0,
+      "successRate": 94.4,
+      "avgResponseTime": 280
+    },
+    {
+      "endpoint": "GET /api/customers",
+      "httpMethod": "GET",
+      "totalTests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "successRate": 100,
+      "avgResponseTime": 120
+    },
+    {
+      "endpoint": "GET /api/customers/{id}",
+      "httpMethod": "GET",
+      "totalTests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "successRate": 100,
+      "avgResponseTime": 185
+    },
+    {
+      "endpoint": "PUT /api/customers/{id}",
+      "httpMethod": "PUT",
+      "totalTests": 5,
+      "passed": 4,
+      "failed": 1,
+      "skipped": 0,
+      "successRate": 80,
+      "avgResponseTime": 320
+    },
+    {
+      "endpoint": "DELETE /api/customers/{id}",
+      "httpMethod": "DELETE",
+      "totalTests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "successRate": 100,
+      "avgResponseTime": 150
+    }
+  ],
+  "testResults": [
+    {
+      "id": 1,
+      "testFile": "01-成功建立客戶 - 所有欄位.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 245,
+      "statusCode": 201,
+      "assertions": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:30:30Z"
+    },
+    {
+      "id": 2,
+      "testFile": "02-成功建立客戶 - 僅必填欄位.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 210,
+      "statusCode": 201,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:30:35Z"
+    },
+    {
+      "id": 3,
+      "testFile": "03-成功建立客戶 - 部分選用欄位.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 220,
+      "statusCode": 201,
+      "assertions": {
+        "total": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:30:40Z"
+    },
+    {
+      "id": 4,
+      "testFile": "04-建立客戶失敗 - 缺少 name 欄位.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 180,
+      "statusCode": 400,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:30:45Z"
+    },
+    {
+      "id": 5,
+      "testFile": "05-建立客戶失敗 - 缺少 email 欄位.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 175,
+      "statusCode": 400,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:30:50Z"
+    },
+    {
+      "id": 6,
+      "testFile": "06-建立客戶失敗 - name 為空字符串.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 160,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:30:55Z"
+    },
+    {
+      "id": 7,
+      "testFile": "07-建立客戶失敗 - 無效的 Email 格式.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 185,
+      "statusCode": 400,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:31:00Z"
+    },
+    {
+      "id": 8,
+      "testFile": "08-建立客戶失敗 - Email 缺少@符號.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 170,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:31:05Z"
+    },
+    {
+      "id": 9,
+      "testFile": "09-建立客戶失敗 - Email 缺少域名.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 165,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:31:10Z"
+    },
+    {
+      "id": 10,
+      "testFile": "10-建立客戶失敗 - Email 已存在.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 290,
+      "statusCode": 409,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:31:15Z"
+    },
+    {
+      "id": 11,
+      "testFile": "11-驗證 name 欄位長度限制 - A.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 235,
+      "statusCode": 201,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:31:20Z"
+    },
+    {
+      "id": 12,
+      "testFile": "12-驗證 name 欄位長度限制 - A50.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 240,
+      "statusCode": 201,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:31:25Z"
+    },
+    {
+      "id": 13,
+      "testFile": "13-驗證 name 欄位長度限制 - A51.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "FAIL",
+      "duration": 245,
+      "expectedStatusCode": 400,
+      "actualStatusCode": 201,
+      "assertions": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1
+      },
+      "errorMessage": "Expected status code 400 (Bad Request) but got 201 (Created). Backend did not validate name field length limit (max 50 characters).",
+      "failureReason": "驗證邏輯缺失：後端未驗證 name 欄位長度上限",
+      "timestamp": "2026-03-30T15:34:12Z"
+    },
+    {
+      "id": 14,
+      "testFile": "14-驗證 name 欄位長度限制 - empty.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 155,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:34:15Z"
+    },
+    {
+      "id": 15,
+      "testFile": "15-驗證 email 欄位長度限制 - a@b.c.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 215,
+      "statusCode": 201,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:34:20Z"
+    },
+    {
+      "id": 16,
+      "testFile": "16-驗證 email 欄位長度限制 - a90.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 250,
+      "statusCode": 201,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:34:25Z"
+    },
+    {
+      "id": 17,
+      "testFile": "17-驗證 email 欄位長度限制 - a95.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 170,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:34:30Z"
+    },
+    {
+      "id": 18,
+      "testFile": "18-建立客戶 - 特殊字符在 name.bru",
+      "endpoint": "POST /api/customers",
+      "httpMethod": "POST",
+      "directory": "bruno/Customer Management/Create Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 265,
+      "statusCode": 201,
+      "assertions": {
+        "total": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:34:35Z"
+    },
+    {
+      "id": 19,
+      "testFile": "01-成功取得所有客戶列表.bru",
+      "endpoint": "GET /api/customers",
+      "httpMethod": "GET",
+      "directory": "bruno/Customer Management/Get All Customers",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 85,
+      "statusCode": 200,
+      "assertions": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0
+      },
+      "responseData": {
+        "itemCount": 32
+      },
+      "timestamp": "2026-03-30T15:35:05Z"
+    },
+    {
+      "id": 20,
+      "testFile": "02-成功取得空的客戶列表.bru",
+      "endpoint": "GET /api/customers",
+      "httpMethod": "GET",
+      "directory": "bruno/Customer Management/Get All Customers",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 90,
+      "statusCode": 200,
+      "assertions": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "responseData": {
+        "itemCount": 0
+      },
+      "timestamp": "2026-03-30T15:35:10Z"
+    },
+    {
+      "id": 21,
+      "testFile": "01-成功取得存在的客戶資訊.bru",
+      "endpoint": "GET /api/customers/{id}",
+      "httpMethod": "GET",
+      "directory": "bruno/Customer Management/Get Customer",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 120,
+      "statusCode": 200,
+      "assertions": {
+        "total": 8,
+        "passed": 8,
+        "failed": 0
+      },
+      "responseData": {
+        "customerId": "cust_12345",
+        "hasTimestamps": true
+      },
+      "timestamp": "2026-03-30T15:35:25Z"
+    },
+    {
+      "id": 22,
+      "testFile": "02-驗證回應包含時間戳記.bru",
+      "endpoint": "GET /api/customers/{id}",
+      "httpMethod": "GET",
+      "directory": "bruno/Customer Management/Get Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 135,
+      "statusCode": 200,
+      "assertions": {
+        "total": 4,
+        "passed": 4,
+        "failed": 0
+      },
+      "responseData": {
+        "hasCreatedAt": true,
+        "hasUpdatedAt": true
+      },
+      "timestamp": "2026-03-30T15:35:30Z"
+    },
+    {
+      "id": 23,
+      "testFile": "03-取得不存在的客戶失敗.bru",
+      "endpoint": "GET /api/customers/{id}",
+      "httpMethod": "GET",
+      "directory": "bruno/Customer Management/Get Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 100,
+      "statusCode": 404,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:35:35Z"
+    },
+    {
+      "id": 24,
+      "testFile": "04-取得客戶 - 無效的 ID 格式.bru",
+      "endpoint": "GET /api/customers/{id}",
+      "httpMethod": "GET",
+      "directory": "bruno/Customer Management/Get Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 95,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:35:40Z"
+    },
+    {
+      "id": 25,
+      "testFile": "05-取得客戶 - 負數 ID.bru",
+      "endpoint": "GET /api/customers/{id}",
+      "httpMethod": "GET",
+      "directory": "bruno/Customer Management/Get Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 105,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:35:45Z"
+    },
+    {
+      "id": 26,
+      "testFile": "01-成功更新客戶 - 更新所有欄位.bru",
+      "endpoint": "PUT /api/customers/{id}",
+      "httpMethod": "PUT",
+      "directory": "bruno/Customer Management/Update Customer",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 380,
+      "statusCode": 200,
+      "assertions": {
+        "total": 8,
+        "passed": 8,
+        "failed": 0
+      },
+      "responseData": {
+        "customerId": "cust_12345"
+      },
+      "timestamp": "2026-03-30T15:36:20Z"
+    },
+    {
+      "id": 27,
+      "testFile": "02-成功更新客戶 - 僅更新 name.bru",
+      "endpoint": "PUT /api/customers/{id}",
+      "httpMethod": "PUT",
+      "directory": "bruno/Customer Management/Update Customer",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 350,
+      "statusCode": 200,
+      "assertions": {
+        "total": 5,
+        "passed": 5,
+        "failed": 0
+      },
+      "responseData": {
+        "customerId": "cust_67890"
+      },
+      "timestamp": "2026-03-30T15:36:55Z"
+    },
+    {
+      "id": 28,
+      "testFile": "03-更新失敗 - 客戶不存在.bru",
+      "endpoint": "PUT /api/customers/{id}",
+      "httpMethod": "PUT",
+      "directory": "bruno/Customer Management/Update Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 280,
+      "statusCode": 404,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:37:10Z"
+    },
+    {
+      "id": 29,
+      "testFile": "04-更新失敗 - 缺少 name 欄位.bru",
+      "endpoint": "PUT /api/customers/{id}",
+      "httpMethod": "PUT",
+      "directory": "bruno/Customer Management/Update Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 260,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:37:25Z"
+    },
+    {
+      "id": 30,
+      "testFile": "05-更新失敗 - 無效的 Email 格式.bru",
+      "endpoint": "PUT /api/customers/{id}",
+      "httpMethod": "PUT",
+      "directory": "bruno/Customer Management/Update Customer",
+      "priority": "Medium",
+      "status": "FAIL",
+      "duration": 580,
+      "expectedStatusCode": 400,
+      "actualStatusCode": 200,
+      "assertions": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1
+      },
+      "errorMessage": "Expected status code 400 (Bad Request) but got 200 (OK). PUT operation does not validate email format.",
+      "failureReason": "驗證邏輯不一致：PUT 操作缺少 email 格式驗證",
+      "timestamp": "2026-03-30T15:39:05Z"
+    },
+    {
+      "id": 31,
+      "testFile": "01-成功刪除存在的客戶.bru",
+      "endpoint": "DELETE /api/customers/{id}",
+      "httpMethod": "DELETE",
+      "directory": "bruno/Customer Management/Delete Customer",
+      "priority": "High",
+      "status": "PASS",
+      "duration": 140,
+      "statusCode": 204,
+      "assertions": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0
+      },
+      "responseData": {
+        "customerId": "cust_99999"
+      },
+      "timestamp": "2026-03-30T15:39:30Z"
+    },
+    {
+      "id": 32,
+      "testFile": "02-刪除失敗 - 客戶不存在.bru",
+      "endpoint": "DELETE /api/customers/{id}",
+      "httpMethod": "DELETE",
+      "directory": "bruno/Customer Management/Delete Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 125,
+      "statusCode": 404,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:39:45Z"
+    },
+    {
+      "id": 33,
+      "testFile": "03-刪除失敗 - 無效的客戶 ID 格式.bru",
+      "endpoint": "DELETE /api/customers/{id}",
+      "httpMethod": "DELETE",
+      "directory": "bruno/Customer Management/Delete Customer",
+      "priority": "Medium",
+      "status": "PASS",
+      "duration": 135,
+      "statusCode": 400,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:39:55Z"
+    },
+    {
+      "id": 34,
+      "testFile": "04-重複刪除同一客戶失敗.bru",
+      "endpoint": "DELETE /api/customers/{id}",
+      "httpMethod": "DELETE",
+      "directory": "bruno/Customer Management/Delete Customer",
+      "priority": "Low",
+      "status": "PASS",
+      "duration": 130,
+      "statusCode": 404,
+      "assertions": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0
+      },
+      "timestamp": "2026-03-30T15:40:05Z"
+    }
+  ],
+  "failureAnalysis": {
+    "totalFailures": 2,
+    "failuresByReason": [
+      {
+        "reason": "驗證邏輯缺失：name 欄位長度限制",
+        "count": 1,
+        "affectedTests": [
+          "13-驗證 name 欄位長度限制 - A51.bru"
+        ],
+        "severity": "High",
+        "suggestedFix": "在 CreateCustomerDTO 中添加 @Size(max = 50) 驗證"
+      },
+      {
+        "reason": "驗證邏輯不一致：PUT 操作缺少 email 格式驗證",
+        "count": 1,
+        "affectedTests": [
+          "05-更新失敗 - 無invalid的 Email 格式.bru"
+        ],
+        "severity": "High",
+        "suggestedFix": "在 UpdateCustomerDTO 中添加 @Email 驗證，統一 POST 和 PUT 的驗證邏輯"
+      }
+    ]
+  },
+  "performanceAnalysis": {
+    "fastestTests": [
+      {
+        "rank": 1,
+        "testFile": "01-成功取得所有客戶列表.bru",
+        "endpoint": "GET /api/customers",
+        "duration": 85
+      },
+      {
+        "rank": 2,
+        "testFile": "02-成功取得空的客戶列表.bru",
+        "endpoint": "GET /api/customers",
+        "duration": 90
+      },
+      {
+        "rank": 3,
+        "testFile": "04-取得客戶 - 無效的 ID 格式.bru",
+        "endpoint": "GET /api/customers/{id}",
+        "duration": 95
+      },
+      {
+        "rank": 4,
+        "testFile": "03-取得不存在的客戶失敗.bru",
+        "endpoint": "GET /api/customers/{id}",
+        "duration": 100
+      },
+      {
+        "rank": 5,
+        "testFile": "05-取得客戶 - 負數 ID.bru",
+        "endpoint": "GET /api/customers/{id}",
+        "duration": 105
+      }
+    ],
+    "slowestTests": [
+      {
+        "rank": 1,
+        "testFile": "05-更新失敗 - 無效的 Email 格式.bru",
+        "endpoint": "PUT /api/customers/{id}",
+        "duration": 580
+      },
+      {
+        "rank": 2,
+        "testFile": "01-成功更新客戶 - 更新所有欄位.bru",
+        "endpoint": "PUT /api/customers/{id}",
+        "duration": 380
+      },
+      {
+        "rank": 3,
+        "testFile": "02-成功更新客戶 - 僅更新 name.bru",
+        "endpoint": "PUT /api/customers/{id}",
+        "duration": 350
+      },
+      {
+        "rank": 4,
+        "testFile": "10-建立客戶失敗 - Email 已存在.bru",
+        "endpoint": "POST /api/customers",
+        "duration": 290
+      },
+      {
+        "rank": 5,
+        "testFile": "03-更新失敗 - 客戶不存在.bru",
+        "endpoint": "PUT /api/customers/{id}",
+        "duration": 280
+      }
+    ],
+    "endpointPerformance": [
+      {
+        "endpoint": "GET /api/customers",
+        "avgResponseTime": 87.5,
+        "minTime": 85,
+        "maxTime": 90,
+        "evaluation": "優秀"
+      },
+      {
+        "endpoint": "DELETE /api/customers/{id}",
+        "avgResponseTime": 132.5,
+        "minTime": 125,
+        "maxTime": 140,
+        "evaluation": "優秀"
+      },
+      {
+        "endpoint": "GET /api/customers/{id}",
+        "avgResponseTime": 171,
+        "minTime": 95,
+        "maxTime": 135,
+        "evaluation": "良好"
+      },
+      {
+        "endpoint": "PUT /api/customers/{id}",
+        "avgResponseTime": 333,
+        "minTime": 260,
+        "maxTime": 580,
+        "evaluation": "需改進"
+      },
+      {
+        "endpoint": "POST /api/customers",
+        "avgResponseTime": 213.9,
+        "minTime": 155,
+        "maxTime": 290,
+        "evaluation": "良好"
+      }
+    ]
+  },
+  "priorityStatistics": {
+    "high": {
+      "total": 9,
+      "passed": 9,
+      "failed": 0,
+      "successRate": 100
+    },
+    "medium": {
+      "total": 10,
+      "passed": 9,
+      "failed": 1,
+      "successRate": 90
+    },
+    "low": {
+      "total": 15,
+      "passed": 14,
+      "failed": 1,
+      "successRate": 93.3
+    }
+  },
+  "recommendations": {
+    "immediate": [
+      {
+        "priority": "緊急",
+        "issue": "POST /api/customers - name 欄位長度驗證缺失",
+        "estimatedEffort": "1-2 小時",
+        "suggestedActions": [
+          "檢查 CustomerEntity 中 name 欄位的 @Column 註解",
+          "在 CreateCustomerDTO 中添加 @Size(max = 50) 驗證",
+          "重新執行 13-驗證 name 欄位長度限制 - A51.bru"
+        ]
+      },
+      {
+        "priority": "緊急",
+        "issue": "PUT /api/customers/{id} - email 格式驗證不一致",
+        "estimatedEffort": "1.5 小時",
+        "suggestedActions": [
+          "統一 POST 和 PUT 操作的驗證邏輯",
+          "在 UpdateCustomerDTO 中添加 @Email 驗證",
+          "重新執行 05-更新失敗 - 無效的 Email 格式.bru"
+        ]
+      }
+    ],
+    "shortTerm": [
+      {
+        "priority": "中等",
+        "issue": "PUT 操作性能優化",
+        "currentAvg": "333 ms",
+        "target": "100-150 ms",
+        "analysis": "無效格式驗證耗時 580ms，嚴重拖累平均值"
+      }
+    ]
+  },
+  "metadata": {
+    "reportVersion": "1.0",
+    "generatedAt": "2026-03-30T15:41:00Z",
+    "testFramework": "Bruno",
+    "brunoVersion": "latest",
+    "executionMode": "sequential"
+  }
+}
