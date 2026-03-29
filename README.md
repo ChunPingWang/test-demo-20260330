@@ -295,3 +295,87 @@ WHERE name LIKE '%John%';
 -- 查看資料表結構
 SHOW COLUMNS FROM customers;
 ```
+
+## GitHub Copilot Prompt vs Claude Code Skill 比較
+
+GitHub Copilot 與 Claude Code 都提供了可擴充的指令機制，讓開發者能以 `/command` 的方式快速觸發預定義的操作流程。以下針對兩者的核心觀念與使用方式進行比較。
+
+### 核心觀念
+
+| 面向 | GitHub Copilot — Prompt (Custom Instructions) | Claude Code — Skill |
+|------|----------------------------------------------|---------------------|
+| 定義方式 | 在 `.github/copilot-instructions.md` 或 `.github/prompts/*.prompt.md` 中以 Markdown 撰寫 | 在 `.claude/commands/*.md` 中以 Markdown 撰寫，或透過 MCP Server 動態提供 |
+| 觸發方式 | 在 Copilot Chat 中輸入 `/` 加上檔名（如 `/my-prompt`） | 在 Claude Code 中輸入 `/` 加上檔名（如 `/commit`、`/simplify`） |
+| 作用範圍 | 專案層級（`.github/`）或使用者層級 | 專案層級（`.claude/commands/`）或使用者層級（`~/.claude/commands/`） |
+| 參數支援 | 支援 `$selection`、`$file` 等內建變數 | 支援 `$ARGUMENTS` 佔位符接收使用者輸入 |
+| 上下文引用 | 可透過 `#file`、`#selection` 等方式附加上下文 | 自動存取工作目錄的檔案，可搭配工具（Read、Grep、Bash 等）蒐集上下文 |
+| 工具整合 | 可觸發 VS Code 內建操作（如產生測試、修正程式碼） | 可呼叫所有已註冊的工具（Bash、Git、MCP Server 等）執行實際操作 |
+| 執行能力 | 主要為對話式建議，需人工確認後套用 | 可自主執行多步驟操作（讀檔、改檔、執行指令、Git 操作等） |
+
+### 使用範例對照
+
+#### 1. 產生 Commit Message
+
+**GitHub Copilot（`.github/prompts/commit.prompt.md`）：**
+
+```markdown
+---
+description: "Generate a commit message"
+---
+Based on the current git diff, generate a concise commit message
+following Conventional Commits format.
+```
+
+在 Copilot Chat 中輸入 `/commit`，Copilot 會根據 diff 建議 commit message，由使用者手動複製貼上。
+
+**Claude Code（`.claude/commands/commit.md`）：**
+
+```markdown
+Based on the current git diff, generate a concise commit message
+following Conventional Commits format, then execute the commit.
+```
+
+在 Claude Code 中輸入 `/commit`，Claude 會讀取 diff、產生 message、並直接執行 `git commit`。
+
+#### 2. 程式碼審查
+
+**GitHub Copilot（`.github/prompts/review.prompt.md`）：**
+
+```markdown
+---
+description: "Review code for issues"
+---
+Review #selection for potential bugs, security issues,
+and suggest improvements.
+```
+
+使用者選取程式碼後輸入 `/review`，Copilot 提供文字建議。
+
+**Claude Code（`.claude/commands/review.md`）：**
+
+```markdown
+Review the current branch changes compared to main.
+Check for bugs, security issues, and code style.
+Provide actionable feedback with file paths and line numbers.
+Use $ARGUMENTS as focus area if provided.
+```
+
+輸入 `/review security` 後，Claude 會自動執行 `git diff`、逐一檔案分析、並以結構化格式輸出結果。
+
+### 關鍵差異總結
+
+| 差異點 | GitHub Copilot Prompt | Claude Code Skill |
+|--------|----------------------|-------------------|
+| 執行模式 | 建議導向（Suggestion-based） | 行動導向（Action-based） |
+| 自主程度 | 低 — 需使用者手動套用建議 | 高 — 可自主執行完整工作流程 |
+| 工具鏈整合 | 限於 IDE 內建功能與 MCP 擴充 | 完整 CLI 工具鏈（Shell、Git、MCP 等） |
+| 多步驟流程 | 需使用者逐步引導 | 可一次完成多步驟任務（分析 → 修改 → 測試 → 提交） |
+| 適用場景 | IDE 內即時輔助、程式碼補全與建議 | 複雜的自動化工作流程、跨檔案重構、CI/CD 整合 |
+| 定義複雜度 | 簡潔，以 Prompt 文字為主 | 可結合工具呼叫邏輯，支援更複雜的編排 |
+
+### 何時選用
+
+- **GitHub Copilot Prompt**：適合在 IDE 中快速取得程式碼建議、片段生成、即時問答等輕量場景。
+- **Claude Code Skill**：適合需要自主執行多步驟操作的場景，例如自動化提交、批次重構、程式碼審查並直接修正、跨檔案搜尋與替換等。
+
+兩者並非互斥，可依團隊工作流程搭配使用：在 IDE 內開發時透過 Copilot 取得即時建議，在終端機或 CI 環境中透過 Claude Code 執行自動化任務。
